@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+
+  grpc-server-node:
+    image: edpo1998/server_grpc_201712132
+    stdin_open: true
+    tty: true
+    ports:
+      - "50051:50051"
+    environment:
+      - BROKER_ADDR=amqp://guest:guest@34.66.215.127:5672/
+      - QUEUE=default-queue
+      - SERVER_ADDR=grpc-server-node
+      - SERVER_PORT=50051
+    restart: on-failure
+    networks:
+      - sky-net
+
+  grpc-client-go:
+    image: edpo1998/api_client_grpc_201712132
+    stdin_open: true
+    tty: true
+    ports:
+      - "2000:2000"
+    environment:
+      - SERVER_ADDR=grpc-server-node
+      - PORT=2000
+      - PORT_SERVER=50051
+    restart: on-failure
+    labels:
+      kompose.service.type: LoadBalancer
+    depends_on:
+      - grpc-server-node
+    links:
+      - grpc-server-node
+    networks:
+      - sky-net
+
+networks:
+  sky-net: {}

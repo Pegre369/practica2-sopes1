@@ -1,0 +1,12 @@
+version: '3.7'
+services: 
+  rabbitmq-consumer:
+    image: edpo1998/rabbitmq_consumer_201712132 
+    stdin_open: true
+    tty: true
+    restart: on-failure
+    ports:
+      - "2002:2002"
+    environment: 
+      - BROKER_ADDR=amqp://guest:guest@34.66.215.127:5672/ 
+      - QUEUE=default-queue

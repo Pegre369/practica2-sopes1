@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (a9d05d509)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: rabbitmq-consumer
+  name: rabbitmq-consumer
+spec:
+  containers:
+    - env:
+        - name: BROKER_ADDR
+          value: amqp://guest:guest@34.66.215.127:5672/
+        - name: QUEUE
+          value: default-queue
+      image: edpo1998/rabbitmq_consumer_201712132
+      name: rabbitmq-consumer
+      ports:
+        - containerPort: 2002
+      resources: {}
+      stdin: true
+      tty: true
+  restartPolicy: OnFailure
+status: {}

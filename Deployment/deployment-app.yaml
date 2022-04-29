@@ -1,0 +1,68 @@
+# ------------------------------------------------------ DEPLOYMENT DE GRPC
+---
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: deployment-grpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+    app.kubernetes.io/name: deployment-grpc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: deployment-grpc
+    spec:
+      containers:
+      - name: grpc-client-go
+        image: edpo1998/api_client_grpc_201712132
+        env:
+          - name: PORT
+            value: "2000"
+          - name: PORT_SERVER
+            value: "50051"
+          - name: SERVER_ADDR
+            value: grpc-server-node
+        ports:
+            - containerPort: 2000
+        resources: {}
+        stdin: true
+        tty: true
+      - name: grpc-server-node
+        image: edpo1998/api_client_grpc_201712132
+        env:
+          - name: BROKER_ADDR
+            value: amqp://guest:guest@34.66.215.127:5672/
+          - name: QUEUE
+            value: default-queue
+          - name: SERVER_ADDR
+            value: grpc-server-node
+          - name: SERVER_PORT
+            value: "50051"
+        ports:
+            - containerPort: 50051
+        resources: {}
+        stdin: true
+        tty: true
+
+      restartPolicy: OnFailure
+status: {}
+
+# ------------------------------------------------------ SERVICE DE GRPC
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deployment-grpc
+  creationTimestamp: null
+spec:
+  ports:
+    - name: "2000"
+      port: 2000
+      targetPort: 2000
+  selector:
+    app.kubernetes.io/name: deployment-grpc
+  type: LoadBalancer
+status:
+  loadBalancer: {}

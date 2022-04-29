@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+service ServicioNodejs {
+  rpc IniciarJuego (PlayerGameRequest) returns (PlayerGameReply) {}
+}
+
+// Para el Juego
+message PlayerGameRequest {
+  string players = 1;
+  string game = 2;
+}
+
+message PlayerGameReply {
+  string mensajeganador = 1;
+}
+

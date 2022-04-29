@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "github.com/racarlosdavid/demo-gRPC/proto";
+
+package proto;
+
+service ServicioNodejs {
+  rpc IniciarJuego (PlayerGameRequest) returns (PlayerGameReply) {}
+}
+
+message PlayerGameRequest {
+  string players = 1;
+  string game = 2;
+}
+
+message PlayerGameReply {
+  string mensajeganador = 1;
+}
